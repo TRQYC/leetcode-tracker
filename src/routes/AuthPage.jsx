@@ -12,12 +12,14 @@ const Auth = () => {
     setIsLoginMode((prevMode) => !prevMode);
   };
   const navigate = useNavigate();
-  if (auth.isLoggedIn) {
-    navigate("/");
-  }
+  auth.token && navigate("/dashboard");
+  
+  console.log("render Auth", auth)
+  //isLoading && message.info("loading")
   if (error) {
     console.log("error is not empty", error)
-    //message.error(error)
+    message.error(error)
+    clearError()
   }
 
   const authSubmitHandler = async (values) => {

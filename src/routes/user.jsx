@@ -21,6 +21,8 @@ const siteOptions = [
 
 const User = props => {
     const auth = useContext(AuthContext)
+    //fix 如何解决第一次渲染这个组件时没登录的问题？刷新用户页面会报错这个
+    console.log("render user, auth is", auth)
     const [user, setUser] = useState(null)
     const [form] = Form.useForm()
     const {isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -29,7 +31,7 @@ const User = props => {
         Authorization: "Bearer " + auth.token,
       }
     useEffect(() => {
-        sendRequest('/api/users/'+auth.userId, 'GET', undefined, {Authorization: "Bearer " + auth.token}).then(
+        sendRequest('/api/users/', 'GET', undefined, {Authorization: "Bearer " + auth.token}).then(
             data => setUser(data))}, [auth]);
     if (error) {
         message.error(error)
@@ -83,6 +85,12 @@ const User = props => {
             tooltip={ {title:"select leetcode site"}}
           >
             <Select options={siteOptions}/>
+          </Form.Item>
+          <Form.Item
+            label="leetcodeSession"
+            name="leetSession"
+          >
+            <Input />
           </Form.Item>
           <Form.Item
             wrapperCol={{

@@ -8,9 +8,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Root from "./routes/root";
-import Contact from "./routes/contacts";
-import Input from "./shared/components/Input";
-import Auth from "./routes/auth";
+import Auth from "./routes/AuthPage";
 import AuthContext from "./shared/context/auth-context";
 import useAuth from "./shared/hooks/auth-hook";
 import DashBoardPage from './routes/dashboard/DashboardPage';
@@ -18,6 +16,7 @@ import User from "./routes/user";
 import Todo from './routes/todolist';
 import FormTest from "./routes/form";
 import LoginPage from './routes/Login';
+import Sync from './routes/sync';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -44,6 +43,10 @@ const router = createBrowserRouter([
         element: <FormTest></FormTest>
       },
       {
+        path: "/sync",
+        element: <Sync></Sync>
+      },
+      {
         path: "/login",
         element: <LoginPage></LoginPage>
       },
@@ -59,6 +62,7 @@ const router = createBrowserRouter([
 // 4️⃣ RouterProvider added
 export default function App() {
   const { token, login, logout, userId } = useAuth();
+  console.log("render App", token, userId)
   return (
     <AuthContext.Provider
     value=

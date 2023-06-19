@@ -24,9 +24,8 @@ const useHttpClient = () => {
                  activeHttpRequests.current = activeHttpRequests.current.filter(
                     reqCtrl => reqCtrl !== httpAbortCtrl
                   );
-                  console.log(response.ok)
                   if (!response.ok ) {
-                      console.log("not ok ")
+                      console.log("response status not ok ")
                       setError(responseData.message);
                   }
                   setIsLoading(false);

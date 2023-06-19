@@ -1,16 +1,18 @@
-
-import { Tabs } from 'antd';
-import { useRef, useState } from 'react';
-import ExerciseRecord from './ExerciseRecordTable';
+import { Tabs } from "antd";
+import { useRef, useState, useContext} from "react";
+import PracticeTable from "./practiceTable";
+import Button from '@mui/material/Button';
+import AuthContext from '../../shared/context/auth-context';
 const initialItems = [
   {
-    label: 'Tab 1',
-    children: <ExerciseRecord />,
-    key: '1',
+    label: "Tab 1",
+    children: <PracticeTable />,
+    key: "1",
   },
 ];
 
 const DashBoardPage = () => {
+  const auth = useContext(AuthContext);
   const [activeKey, setActiveKey] = useState(initialItems[0].key);
   const [items, setItems] = useState(initialItems);
   const newTabIndex = useRef(0);
@@ -18,12 +20,12 @@ const DashBoardPage = () => {
     setActiveKey(newActiveKey);
   };
   const add = () => {
-    //todo useBackend 
+    //todo useBackend
     const newActiveKey = `newTab${newTabIndex.current++}`;
     const newPanes = [...items];
     newPanes.push({
-      label: 'New Tab',
-      children: <ExerciseRecord tabKey={newActiveKey}/>,
+      label: "New Tab",
+      children: <PracticeTable tabKey={newActiveKey} />,
       key: newActiveKey,
     });
     setItems(newPanes);
@@ -49,25 +51,33 @@ const DashBoardPage = () => {
     setActiveKey(newActiveKey);
   };
   const onEdit = (targetKey, action) => {
-    if (action === 'add') {
+    if (action === "add") {
       add();
     } else {
       remove(targetKey);
     }
   };
+
   return (
-      <>
-       <Tabs
-      type="editable-card"
-      onChange={onChange}
-      activeKey={activeKey}
-      onEdit={onEdit}
-      items={items}
-    />
-    <button></button>
-      </>
+    <div>
+     
+       <PracticeTable></PracticeTable>
+    </div>
    
+  )
+  //todo 后续改成TAB制
+  return (
+    <>
+      <Tabs
+        type="editable-card"
+        onChange={onChange}
+        activeKey={activeKey}
+        onEdit={onEdit}
+        items={items}
+      />
+      <button></button>
+    </>
   );
 };
 
-export default DashBoardPage
+export default DashBoardPage;

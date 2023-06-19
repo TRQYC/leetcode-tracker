@@ -1,9 +1,10 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 const useAuth = () => {
-  const [token, setToken] = useState(false);
-  const [userId, setUserId] = useState(false);
+  const [token, setToken] = useState('');
+  const [userId, setUserId] = useState('');
   const [tokenExpirationDate, setTokenExpirationDate] = useState();
+
   const login = useCallback((uid, token, expirationDate) => {
     setToken(token);
     setUserId(uid);
@@ -26,6 +27,17 @@ const useAuth = () => {
     setUserId(null);
     localStorage.removeItem("userData");
   }, []);
+
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem('userData'))
+    if (
+      storedData && 
+      storedData.token 
+    ) {
+      setToken(storedData.token);
+      setUserId(storedData.userId);
+    }
+  }, [])
   return { token, login, logout, userId };
 };
 

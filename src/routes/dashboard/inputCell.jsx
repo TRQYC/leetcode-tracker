@@ -4,7 +4,7 @@ import { Button, Form, Input, Tag, Table, Rate, Select } from "antd";
 import { masterLeveloptions, tagOptions } from "./consts";
 
   
-const InputCell = ({ inputType, form, ...props }) => {
+const InputCell = ({ inputType, options, form, ...props }) => {
     const onTagChange = async (value) => {
       console.log("on tag change", value);
       return 
@@ -18,12 +18,12 @@ const InputCell = ({ inputType, form, ...props }) => {
     //组件需要标签列表
     switch (inputType) {
       case "select":
-        return <Select options={masterLeveloptions} {...props} />;
+        return <Select options={options} {...props} />;
       case "tag":
         return (
           <Select
             mode="tags"
-            options={tagOptions}
+            options={options}
             onChange={onTagChange}
             {...props}
           />

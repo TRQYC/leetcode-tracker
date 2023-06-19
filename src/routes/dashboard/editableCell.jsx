@@ -11,6 +11,7 @@ const EditableCell = ({
   record,
   handleSave,
   inputType,
+  options,
   save,
   ...restProps
 }) => {
@@ -57,6 +58,7 @@ const EditableCell = ({
           ref={inputRef}
           onBlur={onBlur}
           form={form}
+          options={options}
         />
       </Form.Item>
     ) : (
