@@ -1,15 +1,14 @@
+/* eslint-disable react/prop-types */
+import { Form } from "antd";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Button, Form, Input, Tag, Table, Rate, Select } from "antd";
-import InputCell from "./inputCell";
 import { EditableContext } from "./editableContext";
+import InputCell from "./inputCell";
 
 const EditableCell = ({
-  title,
   editable,
   children,
   dataIndex,
   record,
-  handleSave,
   inputType,
   options,
   save,

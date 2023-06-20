@@ -71,7 +71,7 @@ function StudyPlan({studyPlanName}) {
         render: (_, record) => {
           return (
             <div>
-              <a href={record.url} target="_blank">
+              <a href={record.url} target="_blank" rel="noreferrer">
                 {record.questionId + " " + record.title}
               </a>
             </div>
@@ -85,7 +85,7 @@ function StudyPlan({studyPlanName}) {
       render: (_, record) => {
         return (
           <div>
-            <a href={record.url} target="_blank">
+            <a href={record.url} target="_blank" rel="noreferrer">
               {record.questionId + " " + record.title}
             </a>
           </div>

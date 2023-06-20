@@ -1,12 +1,8 @@
 
-import { useContext, useState } from 'react';
+import { Button, Form, Input, Select, message } from "antd";
+import React, { useContext, useEffect, useState } from 'react';
 import AuthContext from '../shared/context/auth-context';
-import { Button, Tooltip, Form, Input, Select } from "antd";
-import React from 'react';
-import { useEffect } from 'react';
-import {message} from 'antd'
 import useHttpClient from '../shared/hooks/http-hook';
-import { useForm } from 'antd/es/form/Form';
 const siteOptions = [
     {
       value: "us",
@@ -19,13 +15,13 @@ const siteOptions = [
 ];
   
 
-const User = props => {
+const User = () => {
     const auth = useContext(AuthContext)
     //fix 如何解决第一次渲染这个组件时没登录的问题？刷新用户页面会报错这个
     console.log("render user, auth is", auth)
     const [user, setUser] = useState(null)
     const [form] = Form.useForm()
-    const {isLoading, error, sendRequest, clearError } = useHttpClient();
+    const {error, sendRequest, clearError } = useHttpClient();
     const authHeaders  = {
         "Content-Type": "application/json",
         Authorization: "Bearer " + auth.token,

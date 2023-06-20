@@ -1,36 +1,32 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import {
-  Form,
-  Input,
-  Tag,
-  Table,
-  Rate,
-  Select,
-  message,
-  Spin,
-  Button,
-  Tooltip,
-} from "antd";
 import { Grid } from "@mui/material";
-import { Typography, Stack } from "@mui/material";
+import {
+  Button,
+  Form,
+  Spin,
+  Table,
+  Tag,
+  Tooltip,
+  message
+} from "antd";
+import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../../shared/context/auth-context";
 import useHttpClient from "../../shared/hooks/http-hook";
-import { EditableSelect } from "./editableSelect";
+import {
+  difficultyOptions,
+  proficiencyOptions,
+  reviewOptions,
+  tagOptions,
+  topicOptions,
+} from "./consts";
 import EditableCell from "./editableCell";
 import { EditableContext } from "./editableContext";
-import {
-  tagOptions,
-  proficiencyOptions,
-  topicOptions,
-  difficultyOptions,
-  reviewOptions,
-} from "./consts";
-const { Option } = Select;
+
 
 const onValuesChange = (changedValues, allValues) => {
   console.log("onValuesChange", changedValues, allValues);
 };
 
+// eslint-disable-next-line no-unused-vars, react/prop-types
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
   return (
@@ -42,27 +38,26 @@ const EditableRow = ({ index, ...props }) => {
   );
 };
 
-function Expanded({ exerciseLogs }) {
-  return (
-    <p
-      style={{
-        margin: 0,
-      }}
-    >
-      {exerciseLogs.map((log) => (
-        <Typography>
-          {log.exerciseResult} @{log.createdAt}{" "}
-        </Typography>
-      ))}
-    </p>
-  );
-}
+// function Expanded({ exerciseLogs }) {
+//   return (
+//     <p
+//       style={{
+//         margin: 0,
+//       }}
+//     >
+//       {exerciseLogs.map((log) => (
+//         <Typography>
+//           {log.exerciseResult} @{log.createdAt}{" "}
+//         </Typography>
+//       ))}
+//     </p>
+//   );
+// }
 
 function PracticeTable() {
   const [dataSource, setDataSource] = useState();
   dataSource && console.log("dataSoruce is", dataSource);
   const auth = useContext(AuthContext);
-  const tipMessage = useState(undefined);
   console.log("render dashbaord", auth);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const authHeaders = {
@@ -72,11 +67,6 @@ function PracticeTable() {
   if (error) {
     message.error(error);
     clearError();
-  }
-  let showData;
-  function onChange(pagination, filters, sorter, extra) {
-    console.log("params", pagination, filters, sorter, extra);
-    showData = [];
   }
   const loadData = () => {
     auth.isLoggedIn &&
@@ -94,7 +84,7 @@ function PracticeTable() {
   const handleSyncPractices = async () => {
     auth.isLoggedIn &&
       sendRequest("/api/practice/sync", "POST", undefined, authHeaders)
-        .then((data) => {
+        .then(() => {
           message.info("sync success");
           loadData();
         })
@@ -141,7 +131,7 @@ function PracticeTable() {
       render: (_, record) => {
         return (
           <div>
-            <a href={record.url} target="_blank">
+            <a href={record.url} target="_blank" rel="noreferrer">
               {record.questionId + " " + record.title}
             </a>
           </div>

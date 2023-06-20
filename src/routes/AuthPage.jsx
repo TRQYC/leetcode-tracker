@@ -1,13 +1,14 @@
-import React, { useState, useContext, useEffect } from "react";
-import useForm from "../shared/hooks/form-hook";
-import { Button, Checkbox, Form, Input, message} from "antd";
-import useHttpClient from "../shared/hooks/http-hook";
-import AuthContext from "../shared/context/auth-context";
+import { Button, Form, Input, message } from "antd";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../shared/context/auth-context";
+import useHttpClient from "../shared/hooks/http-hook";
 const Auth = () => {
+
+  
   const [isLoginMode, setIsLoginMode] = useState(true);
   const auth = useContext(AuthContext);
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const {  error, sendRequest, clearError } = useHttpClient();
   const switchModeHandler = () => {
     setIsLoginMode((prevMode) => !prevMode);
   };
@@ -40,7 +41,8 @@ const Auth = () => {
         auth.login(responseData.userId, responseData.token);
         console.log("response Data", responseData);
       } catch (err) {
-        
+        window.alert(error);
+        console.log("err", err);
       }
     } else {
       try {

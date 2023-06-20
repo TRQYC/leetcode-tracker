@@ -1,5 +1,5 @@
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef } from 'react';
 const useHttpClient = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(); 
@@ -9,7 +9,7 @@ const useHttpClient = () => {
       };
     const sendRequest = useCallback(
         async (url, method = 'GET', body = null, headers = {}) => {
-            url = 'http://localhost:3001' + url  
+           // url = 'http://localhost' + url  
             setIsLoading(true);
             const httpAbortCtrl = new AbortController();
              activeHttpRequests.current.push(httpAbortCtrl);
