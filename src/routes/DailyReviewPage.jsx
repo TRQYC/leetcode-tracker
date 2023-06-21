@@ -1,21 +1,14 @@
 
 
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { Form, Input, Tag, Table, Rate, Select, message, Spin, Button} from "antd";
-import { Grid } from "@mui/material";
-import { Typography, Stack } from "@mui/material";
+import { Form, Select, Table, message } from "antd";
+import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../../shared/context/auth-context";
 import useHttpClient from "../../shared/hooks/http-hook";
-import { EditableSelect } from "./editableSelect";
+import {
+  difficultyOptions
+} from "./consts";
 import EditableCell from "./editableCell";
 import { EditableContext } from "./editableContext";
-import {
-  tagOptions,
-  proficiencyOptions,
-  topicOptions,
-  difficultyOptions,
-  reviewOptions,
-} from "./consts";
 const { Option } = Select;
 
 const onValuesChange = (changedValues, allValues) => {
