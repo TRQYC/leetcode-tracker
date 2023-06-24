@@ -9,7 +9,7 @@ const useHttpClient = () => {
       };
     const sendRequest = useCallback(
         async (url, method = 'GET', body = null, headers = {}) => {
-           // url = 'http://localhost' + url  
+            url = 'http://13.210.46.166' + url  
             setIsLoading(true);
             const httpAbortCtrl = new AbortController();
              activeHttpRequests.current.push(httpAbortCtrl);
