@@ -1,5 +1,5 @@
 
-import { useState, useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 const useHttpClient = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(); 
@@ -32,6 +32,7 @@ const useHttpClient = () => {
                   return responseData; 
              } catch(err) {
                 setIsLoading(false);
+                console.log("sendRequest ", url, "error is", err.code, err.message)
                 setError(err.message);
              }
         }
