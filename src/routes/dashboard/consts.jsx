@@ -32,35 +32,9 @@ const difficultyList = ["Easy", "Medium", "Hard"];
 
 export const difficultyOptions = optionsWrapper(difficultyList);
 
-export const tagOptions = [
-  {
-    value: "Template",
-    label: "Template",
-    text: "Template",
-  },
-  {
-    value: "Important",
-    label: "Important",
-    text: "Important",
-  },
-  {
-    value: "Too Easy",
-    label: "Too Easy",
-    text: "Too Easy",
-  },
-  {
-    value: "Need Review",
-    label: "Need Review",
-    text: "Need Review",
-  },
-  {
-    value: "First Pass",
-    label: "First Pass",
-    text: "First Pass",
-  },
-];
 
-const tags = [
+
+const topics = [
   {
     id: "VG9waWNUYWdOb2RlOjU0MA==",
     name: "Array",
@@ -560,14 +534,11 @@ const tags = [
   },
 ];
 
-function tagsToOptions(tags) {
-  return tags.map((tag) => {
-    return {
-      value: tag.name,
-      label: tag.name,
-      text: tag.name,
-    };
-  });
-}
+const topicsList = topics.map(topic => topic.name)
+const classList = ["Sub Sequence"]
+const tagList = ["template", "Important", ...classList, ...difficultyList, ...topicsList]
 
-export const topicOptions = tagsToOptions(tags);
+
+export const tagOptions = optionsWrapper(tagList)
+
+export const topicOptions = optionsWrapper(topicsList);

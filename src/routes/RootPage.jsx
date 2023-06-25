@@ -35,6 +35,7 @@ function Root() {
         </IconButton>
         <Button color="inherit" component={RouterLink} to="/dashboard"> Dashboard</Button>
         {!auth.isLoggedIn && <Button color="inherit" component={RouterLink} to="/auth"> Login</Button>}
+        <Button color="inherit" href='https://kindhearted-breeze-13b.notion.site/LeetcodeTracker-Tutorial-f4a5614c17644254815edd1d5b975c45?pvs=4' target="_blank" > Tutorial</Button>
         {auth.isLoggedIn && (
            <Box sx={{ ml: 'auto' }}>
             <div>
@@ -67,6 +68,7 @@ function Root() {
                   handleClose()
                   auth.logout()}}>LogOut</MenuItem>
                 <MenuItem color="inherit" component={RouterLink} to="/user" onClick={handleClose}>My account</MenuItem>
+                <MenuItem color="inherit" component={RouterLink} to="/sync" onClick={handleClose}>Sync Practices</MenuItem>
               </Menu>
             </div>
             </Box>)

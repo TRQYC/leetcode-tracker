@@ -56,7 +56,7 @@ const EditableRow = ({ index, ...props }) => {
 
 function PracticeTable() {
   const [dataSource, setDataSource] = useState();
-  dataSource && console.log("dataSoruce is", dataSource);
+  //dataSource && console.log("dataSoruce is", dataSource);
   const auth = useContext(AuthContext);
   console.log("render dashbaord", auth);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -65,6 +65,7 @@ function PracticeTable() {
     Authorization: "Bearer " + auth.token,
   };
   if (error) {
+    console.log("error is ", error)
     message.error(error);
     clearError();
   }
@@ -89,9 +90,7 @@ function PracticeTable() {
           loadData();
         })
         .catch(() => {
-          console.log(error);
-          message.error(error);
-          clearError();
+
         });
   };
 

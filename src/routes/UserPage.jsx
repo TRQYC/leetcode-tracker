@@ -76,17 +76,10 @@ const User = () => {
             <Input disabled/>
           </Form.Item>
           <Form.Item
-            label="site"
+            label="leetcode site"
             name="site"
-            tooltip={ {title:"select leetcode site"}}
           >
             <Select options={siteOptions}/>
-          </Form.Item>
-          <Form.Item
-            label="leetcodeSession"
-            name="leetSession"
-          >
-            <Input />
           </Form.Item>
           <Form.Item
             wrapperCol={{

@@ -1,43 +1,35 @@
 
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 const useHttpClient = () => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(); 
-    const activeHttpRequests = useRef([]); 
-    const clearError = () => {
-        setError(null);
-      };
-    const sendRequest = useCallback(
-        async (url, method = 'GET', body = null, headers = {}) => {
-            url = 'http://13.210.46.166' + url  
-            setIsLoading(true);
-            const httpAbortCtrl = new AbortController();
-             activeHttpRequests.current.push(httpAbortCtrl);
-             try {
-                  const response = await fetch(url, {
-                    method, 
-                    body, 
-                    headers, 
-                    signal: httpAbortCtrl.signal
-                });
-                 const responseData = await response.json()
-                 activeHttpRequests.current = activeHttpRequests.current.filter(
-                    reqCtrl => reqCtrl !== httpAbortCtrl
-                  );
-                  if (!response.ok ) {
-                      console.log("response status not ok ")
-                      setError(responseData.message);
-                  }
-                  setIsLoading(false);
-                  return responseData; 
-             } catch(err) {
-                setIsLoading(false);
-                console.log("sendRequest ", url, "error is", err.code, err.message)
-                setError(err.message);
-             }
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
+  const clearError = () => {
+    setError(null);
+  };
+  const sendRequest = useCallback(
+    async (url, method = 'GET', body = null, headers = {}) => {
+      //url = 'http://13.210.46.166' + url  
+      try {
+        const response = await fetch(url, {
+          method,
+          body,
+          headers,
+        });
+
+        const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
         }
-    )
-    return { isLoading, error, sendRequest, clearError };
+        setIsLoading(false);
+        return responseData;
+      } catch (err) {
+        setError(err.message);
+        setIsLoading(false);
+        throw err;
+      }
+    }
+  )
+  return { isLoading, error, sendRequest, clearError };
 }
 
 

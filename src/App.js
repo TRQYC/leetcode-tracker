@@ -7,7 +7,7 @@ import "./App.css";
 import Auth from "./routes/AuthPage";
 import DashBoardPage from './routes/dashboard/DashboardPage';
 import Root from "./routes/RootPage";
-import Sync from './routes/sync';
+import SyncPracticePage from './routes/SyncPracticePage';
 import User from "./routes/UserPage";
 import AuthContext from "./shared/context/auth-context";
 import useAuth from "./shared/hooks/auth-hook";
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/sync",
-        element: <Sync></Sync>
+        element: <SyncPracticePage />,
       },
     ],
   }
