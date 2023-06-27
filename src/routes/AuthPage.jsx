@@ -5,16 +5,16 @@ import AuthContext from "../shared/context/auth-context";
 import useHttpClient from "../shared/hooks/http-hook";
 const Auth = () => {
 
-  
+
   const [isLoginMode, setIsLoginMode] = useState(true);
   const auth = useContext(AuthContext);
-  const {  error, sendRequest, clearError } = useHttpClient();
+  const { error, sendRequest, clearError } = useHttpClient();
   const switchModeHandler = () => {
     setIsLoginMode((prevMode) => !prevMode);
   };
   const navigate = useNavigate();
   auth.token && navigate("/dashboard");
-  
+
   console.log("render Auth", auth)
   //isLoading && message.info("loading")
   if (error) {
@@ -50,6 +50,7 @@ const Auth = () => {
           "/api/users/signup",
           "POST",
           JSON.stringify({
+            name: values.name,
             email: values.email,
             password: values.password,
           }),
@@ -79,6 +80,19 @@ const Auth = () => {
         }}
         onFinish={authSubmitHandler}
       >
+        {!isLoginMode && <Form.Item
+          label="name"
+          name="name"
+          rules={[
+            {
+              required: true,
+              message: "Please input nickname",
+            },
+          ]}
+        >
+          <Input placeholder="email" />
+        </Form.Item>
+        }
         <Form.Item
           label="email"
           name="email"

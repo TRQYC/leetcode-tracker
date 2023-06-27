@@ -536,7 +536,7 @@ const topics = [
 
 const topicsList = topics.map(topic => topic.name)
 const classList = ["Sub Sequence"]
-const tagList = ["template", "Important", ...classList, ...difficultyList, ...topicsList]
+const tagList = ["Template", "Important", "New Idea", ...classList, ...difficultyList, ...topicsList]
 
 
 export const tagOptions = optionsWrapper(tagList)

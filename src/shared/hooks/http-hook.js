@@ -10,6 +10,7 @@ const useHttpClient = () => {
     async (url, method = 'GET', body = null, headers = {}) => {
       //url = 'http://13.210.46.166' + url  
       try {
+        setIsLoading(true)
         const response = await fetch(url, {
           method,
           body,

@@ -76,6 +76,12 @@ const User = () => {
             <Input disabled/>
           </Form.Item>
           <Form.Item
+            label="nickname"
+            name="name"
+          >
+             <Input />
+          </Form.Item>
+          <Form.Item
             label="leetcode site"
             name="site"
           >

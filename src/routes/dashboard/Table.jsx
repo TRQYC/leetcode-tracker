@@ -1,8 +1,6 @@
-import { Grid } from "@mui/material";
+/* eslint-disable react/prop-types */
 import {
-  Button,
   Form,
-  Spin,
   Table,
   Tag,
   Tooltip,
@@ -38,29 +36,11 @@ const EditableRow = ({ index, ...props }) => {
   );
 };
 
-// function Expanded({ exerciseLogs }) {
-//   return (
-//     <p
-//       style={{
-//         margin: 0,
-//       }}
-//     >
-//       {exerciseLogs.map((log) => (
-//         <Typography>
-//           {log.exerciseResult} @{log.createdAt}{" "}
-//         </Typography>
-//       ))}
-//     </p>
-//   );
-// }
-
-function PracticeTable() {
-  const [dataSource, setDataSource] = useState();
+function QuestionTable({ dataSource, shownColums}) {
   //dataSource && console.log("dataSoruce is", dataSource);
   const auth = useContext(AuthContext);
-  console.log("render dashbaord", auth);
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
-  console.log("isloading is", isLoading)
+  const {error, sendRequest, clearError } = useHttpClient();
+  const [site, setSite] = useState('en');
   const authHeaders = {
     "Content-Type": "application/json",
     Authorization: "Bearer " + auth.token,
@@ -70,59 +50,38 @@ function PracticeTable() {
     message.error(error);
     clearError();
   }
-  const loadData = () => {
+
+  const loadConfig = () => {
     auth.isLoggedIn &&
-      sendRequest("/api/practice", "GET", undefined, authHeaders)
+      sendRequest("/api/users", "GET", undefined, authHeaders)
         .then((data) => {
-          setDataSource(data.data);
+          data.site && setSite(data.site)
         })
         .catch(() => {
-          console.log(error);
-          message.error(error);
-          clearError();
-          setDataSource(null);
-        });
-  };
-  const handleSyncPractices = async () => {
-    auth.isLoggedIn &&
-      sendRequest("/api/practice/sync", "POST", undefined, authHeaders)
-        .then(() => {
-          message.info("sync success");
-          loadData();
-        })
-        .catch(() => {
-
         });
   };
 
-  useEffect(() => {
-    loadData();
-  }, [auth]);
+  useEffect(loadConfig, [])
 
   const save = (values, record) => {
-    const row = {
-      ...record,
-      ...values,
-    };
-    console.log("save", values, record);
-    const newData = [...dataSource];
-    const index = newData.findIndex((item) => row._id === item._id);
-    console.log("find the index is", index);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row,
-    });
     sendRequest(
       "/api/practice/" + record._id,
       "PATCH",
       JSON.stringify(values),
       authHeaders
     ).then(() => {
-      setDataSource(newData);
+      //todo reload page 
       message.info("update success");
     });
   };
+
+  const EditableComponent = {
+    body: {
+      row: EditableRow,
+      cell: EditableCell,
+    },
+  };
+ 
   const defaultColumns = [
     {
       title: "Title",
@@ -130,9 +89,10 @@ function PracticeTable() {
       width: "15%",
       sorter: (a, b) => a.questionId - b.questionId,
       render: (_, record) => {
+        const url = (site == "en" ? `https://leetcode.com/problems/${record.titleSlug}`: `https://leetcode.cn/problems/${record.titleSlug}`)
         return (
           <div>
-            <a href={record.url} target="_blank" rel="noreferrer">
+            <a href={url} target="_blank" rel="noreferrer">
               {record.questionId + " " + record.title}
             </a>
           </div>
@@ -151,14 +111,15 @@ function PracticeTable() {
     },
     {
       title: "Topic",
-      width: "10%",
+      width: "15%",
+      dataIndex: "topicTags",
       render: (_, record) => {
         return (
           <div>
             {record.topicTags &&
               record.topicTags.map((tag, index) => (
                 <Tag key={index} color="orange">
-                  {tag.name}
+                  {tag}
                 </Tag>
               ))}
           </div>
@@ -255,13 +216,8 @@ function PracticeTable() {
     },
   ];
 
-  const components = {
-    body: {
-      row: EditableRow,
-      cell: EditableCell,
-    },
-  };
-  const columns = defaultColumns.map((col) => {
+
+  let columns = defaultColumns.map((col) => {
     if (!col.editable) {
       return col;
     }
@@ -277,23 +233,16 @@ function PracticeTable() {
         save,
       }),
     };
-  });
-
+    });
+  if (shownColums && shownColums.length > 0) {
+ columns = columns.filter(column => shownColums.indexOf(column.title) != -1)
+  }
+ 
   return (
     <div>
-      <Spin spinning={isLoading}>
-        <Grid container justifyContent="flex-middle">
-          <Grid item>
-            <Button variant="contained" onClick={handleSyncPractices}>
-              Sync Practices
-            </Button>
-          </Grid>
-        </Grid>
-      </Spin>
-
       <Table
         rowKey={(record) => record.title} //todo 改成id
-        components={components}
+        components={EditableComponent}
         rowClassName={() => "editable-row"}
         bordered
         dataSource={dataSource}
@@ -303,4 +252,4 @@ function PracticeTable() {
   );
 }
 
-export default PracticeTable;
+export default QuestionTable;

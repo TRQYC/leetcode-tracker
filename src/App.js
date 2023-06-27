@@ -7,6 +7,8 @@ import "./App.css";
 import Auth from "./routes/AuthPage";
 import DashBoardPage from './routes/dashboard/DashboardPage';
 import Root from "./routes/RootPage";
+import StudyPlanDetailPage from './routes/StudyPlanDetailPage';
+import StudyPlanListPage from './routes/StudyPlanListPage';
 import SyncPracticePage from './routes/SyncPracticePage';
 import User from "./routes/UserPage";
 import AuthContext from "./shared/context/auth-context";
@@ -32,6 +34,14 @@ const router = createBrowserRouter([
         path: "/sync",
         element: <SyncPracticePage />,
       },
+      {
+        path: "/studyplan/:planId",
+        element: <StudyPlanDetailPage />,
+      },
+      {
+        path: "/studyplan",
+        element: <StudyPlanListPage />,
+      },
     ],
   }
   
@@ -39,7 +49,7 @@ const router = createBrowserRouter([
 
 // 4️⃣ RouterProvider added
 export default function App() {
-  const { token, login, logout, userId } = useAuth();
+  const { token, login, logout, userId, site } = useAuth();
   console.log("render App", token, userId)
   return (
     <AuthContext.Provider
@@ -48,6 +58,7 @@ export default function App() {
       isLoggedIn: !!token,
       token: token,
       userId: userId,
+      site: site, 
       login: login,
       logout: logout,
     }}
