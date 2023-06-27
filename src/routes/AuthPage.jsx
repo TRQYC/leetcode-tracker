@@ -13,7 +13,7 @@ const Auth = () => {
     setIsLoginMode((prevMode) => !prevMode);
   };
   const navigate = useNavigate();
-  auth.token && navigate("/dashboard");
+  //auth.token && 
 
   console.log("render Auth", auth)
   //isLoading && message.info("loading")
@@ -39,6 +39,7 @@ const Auth = () => {
         );
         //todo
         auth.login(responseData.userId, responseData.token);
+        navigate("/dashboard");
         console.log("response Data", responseData);
       } catch (err) {
         window.alert(error);
@@ -59,6 +60,7 @@ const Auth = () => {
           }
         );
         auth.login(responseData.userId, responseData.token);
+        navigate("/sync");
         console.log("response Data", responseData);
       } catch (err) {
         window.alert(error);

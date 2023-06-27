@@ -78,6 +78,7 @@ const SyncPracticePage = () => {
                     <Form.Item
                         label="leetcode session"
                         name="leetSession"
+                        tooltip="refer to tutorial  to find your session value"
                     >
                         <Input />
                     </Form.Item>
