@@ -1,46 +1,47 @@
+/* eslint-disable react/prop-types */
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Col, Drawer, Form, Input, Row, Select, Space, message } from 'antd';
-import React, { useContext, useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { Button, Col, Drawer, Form, Input, Row, Select, Space, Spin, message } from 'antd';
+import React, { useContext } from 'react';
 import AuthContext from '../../shared/context/auth-context';
 import useHttpClient from '../../shared/hooks/http-hook';
 const { Option } = Select;
-const CreateStudyPlan = () => {
-  const [open, setOpen] = useState(false);
+const CreateStudyPlan = ({ open, setOpen, plan }) => {
   const auth = useContext(AuthContext);
   const [form] = Form.useForm();
-  const {error, sendRequest, clearError } = useHttpClient();
-  const navigate = useNavigate();
+  //每次进来都需要更新表单值
+  //todo 有个BUG，点击更新后会表单会展示旧的plan
+  let initialPlan = plan || { visibility: "public" }
+  form.setFieldsValue(initialPlan)
+  const { error, sendRequest, clearError, isLoading } = useHttpClient();
+  //const navigate = useNavigate();
   const authHeaders = {
     "Content-Type": "application/json",
     Authorization: "Bearer " + auth.token,
   };
+
   if (error) {
     console.log("error is ", error)
     message.error(error);
     clearError();
   }
-  const showDrawer = () => {
-    setOpen(true);
-  };
-
   const handleSubmitStudyPlan = (values) => {
-    sendRequest('/api/studyplan', "POST", JSON.stringify(values), authHeaders).then((response) => {message.info("create success"); navigate(`/studyplan/${response.id}`)}).catch(err => console.log(err))
+    const createMode = plan && plan.id
+    if (createMode) {
+      values.id = plan.id
+    }
+
+    const patternsCopy = values.patterns.map(pattern => { return { ...pattern, questionIds: pattern.questionIds.split(',') } })
+    console.log("submit", patternsCopy)
+    sendRequest('/api/studyplan', "POST", JSON.stringify({ ...values, patterns: patternsCopy }), authHeaders).then(() => { message.info("save success"); setOpen(false); window.location.reload(); }).catch(err => console.log(err))
   }
-  
-  const onClose = () => {
-   setOpen(false)
-  };
- 
+
+  console.log("render create plan  ", initialPlan)
   return (
     <>
-      <Button type="primary" onClick={showDrawer} icon={<PlusOutlined />}>
-        New Study Plan
-      </Button>
       <Drawer
-        title="Create a new study plan"
+        title="study plan"
         width={720}
-        onClose={onClose}
+        onClose={() => setOpen(false)}
         open={open}
         bodyStyle={{
           paddingBottom: 80,
@@ -48,15 +49,15 @@ const CreateStudyPlan = () => {
         extra={
           <Space>
             <Button onClick={() => setOpen(false)}>Cancel</Button>
-            <Button onClick={() => {form.submit()}} type="primary">
-              Submit
-            </Button>
+            <Spin spinning={isLoading}>
+              <Button onClick={() => { form.submit() }} type="primary">
+                {plan ? "Save" : "Create"}
+              </Button>
+            </Spin>
           </Space>
         }
       >
-        <Form layout="vertical" form={form} hideRequiredMark onFinish={handleSubmitStudyPlan} initialValues={
-         { visibility: "public"} 
-        }>
+        <Form layout="vertical" form={form} hideRequiredMark onFinish={handleSubmitStudyPlan}>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
@@ -84,7 +85,7 @@ const CreateStudyPlan = () => {
                 ]}
               >
                 <Select placeholder="Please choose the visibility">
-                 <Option value="public">Public</Option>
+                  <Option value="public">Public</Option>
                   <Option value="private">Private</Option>
                 </Select>
               </Form.Item>
@@ -107,39 +108,39 @@ const CreateStudyPlan = () => {
             {(fields, { add, remove }) => (
               <>
                 {fields.map(({ key, name, ...restField }) => (
-                  <Row key = {key} gutter={16}>
+                  <Row key={key} gutter={16}>
                     <Col span={6}>
-                    <Form.Item
-                      {...restField}
-                      label="Pattern Name"
-                      name={[name, "name"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Missing pattern name"
-                        }
-                      ]}
-                    >
-                      <Input placeholder="Trees" />
-                    </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        label="Pattern Name"
+                        name={[name, "name"]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Missing pattern name"
+                          }
+                        ]}
+                      >
+                        <Input placeholder="Trees" />
+                      </Form.Item>
                     </Col>
                     <Col span={16}>
-                    <Form.Item
-                      {...restField}
-                      label="QuestionID List"
-                      name={[name, "questionIds"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Missing QuestionIds"
-                        }
-                      ]}
-                    >
-                      <Input placeholder="1,2,3,4" />
-                    </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        label="QuestionID List"
+                        name={[name, "questionIds"]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Missing QuestionIds"
+                          }
+                        ]}
+                      >
+                        <Input placeholder="1,2,3,4" />
+                      </Form.Item>
                     </Col>
                     <MinusCircleOutlined onClick={() => remove(name)} />
-                    </Row>
+                  </Row>
                 ))}
                 <Form.Item>
                   <Button
@@ -149,7 +150,7 @@ const CreateStudyPlan = () => {
                     icon={<PlusOutlined />}
                   >
                     Add a pattern
-                  </Button>
+                  </Button> 
                 </Form.Item>
               </>
             )}
